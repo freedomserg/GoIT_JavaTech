@@ -1,5 +1,12 @@
 package practice3_adv;
 
+/*Бінарна Купа
+Реалізуйте структуру даних  - Бінарна Купа (Binary Heap).
+Конструктор проймає один параметр size.
+Методи insert(int) що працює за O(logN) і poll(),
+який видаляє і повертає максимальне число з купи і також працює за O(logN).
+*/
+
 public class BinaryHeap {
     private int[] binaryHeap;
     private int currentSize;
@@ -10,11 +17,19 @@ public class BinaryHeap {
 
     public void insert(int val) {
         if ((currentSize + 1) > binaryHeap.length) {
-            int[] newArray = new int[binaryHeap.length * 2];
-            System.arraycopy(binaryHeap, 0, newArray, 0, binaryHeap.length);
-            binaryHeap = newArray;
+            increaseHeapCapacity();
         }
         binaryHeap[currentSize++] = val;
+        upShiftRecovery();
+    }
+
+    private void increaseHeapCapacity() {
+        int[] newArray = new int[binaryHeap.length * 2];
+        System.arraycopy(binaryHeap, 0, newArray, 0, binaryHeap.length);
+        binaryHeap = newArray;
+    }
+
+    private void upShiftRecovery() {
         int childIndex = currentSize - 1;
         while (childIndex > 0) {
             int parentIndex = (childIndex - 1) / 2;
@@ -40,6 +55,12 @@ public class BinaryHeap {
         binaryHeap[currentSize - 1] = 0;
         currentSize--;
 
+        downShiftRecovery();
+
+        return max;
+    }
+
+    private void downShiftRecovery() {
         int currentPosition = 0;
         int leftChild = 2*currentPosition + 1;
         while (leftChild < currentSize) {
@@ -58,8 +79,6 @@ public class BinaryHeap {
                 leftChild = 2*currentPosition + 1;
             } else break;
         }
-
-        return max;
     }
 
     public String toString() {
